@@ -1,5 +1,32 @@
 <?php
+	if(isset($_POST['enviar'])){
+		$numNoches = $_POST['noches'];
+		$errores = '';	
+		define("PRECIO_NOCHE",60);	
+		define("PRECIO_COCHE",40);
+		function calcularPrecio() {            
+			PRECIO_NOCHE * $numNoches;  
+		   }
+		
+		
+		//echo PRECIO_COCHE;
+	try {
+		//code...
+		if (!is_numeric($numNoches)|| $numNoches<=0)  {
+			$errores .= "Noches debe ser numérico y mayor que 0";# code...
+		}
+		//echo "$numNoches";
+		if (!empty($errores)) {
+			throw new Exception($errores);			
+		}
+		
+		
+	} catch (Exception $e) {
+		$mensajes =$e ->getMessage();
+		//throw $th;
+	}
 	
+	}	
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -40,6 +67,8 @@
 			</div>
 			<label class="col-sm-3 col-form-label"></label>
 		  	<button type="submit" class="btn btn-primary" name='enviar'>Enviar datos</button>
+			  <label class="col-sm-3 col-form-label"></label>
+		  	<button type="submit" class="btn btn-danger" name='limpiar'>limpiar datos</button>
 		  	<br><br>
 		  	<div class="row mb-3">
 			    <label class="col-sm-3 col-form-label">Coste total: </label>
@@ -47,7 +76,7 @@
 			      <input type="text" class="form-control" name="total" id="total" disabled>
 			    </div>
 			</div><br>
-			<span class='errores'></span>
+			<span class='errores'><?php echo $mensajes ??null; ?></span>
 		</form>
 	</main>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
