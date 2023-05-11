@@ -1,0 +1,5 @@
+* {font-family: arial; box-sizing: border-box;}
+body {background: lightgreen;}
+.centrar  {text-align: center;}
+h1 {color: maroon;}
+main {width: 70%; margin: 50px auto; max-width: 1200px; padding: 20px; border: 2px solid green; border-radius: 10px;box-shadow: 3px 3px 5px green}
