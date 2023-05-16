@@ -4,8 +4,7 @@
 		$errores = '';	
 		define("PRECIO_NOCHE",60);	
 		define("PRECIO_COCHE",40);
-	}
-	
+	}	
 		// echo PRECIO_NOCHE;
 	try {
 		
@@ -39,11 +38,9 @@
 		if (!empty($errores)) {
 			throw new Exception($errores);			
 		}
-		if (!is_numeric($numCoche)|| $numCoche<=0)  {
-
-			$alquiler =0;
-		}
-		
+		if (!is_numeric($numCoche)|| $numCoche<=2)  {
+			$alquiler = $numCoche;
+		}		
 		if ($numCoche>=3) {
 			$alquiler =((float)$numCoche * 0.80) * PRECIO_COCHE;
         }
