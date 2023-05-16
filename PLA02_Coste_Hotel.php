@@ -4,33 +4,70 @@
 		$errores = '';	
 		define("PRECIO_NOCHE",60);	
 		define("PRECIO_COCHE",40);
+	}
 	
 		// echo PRECIO_NOCHE;
 	try {
-		//code...
+		
 		$numNoches = $_POST['noches'];
+		$vuelo = $_POST['ciudad'];
+		$numCoche = $_POST['coche'];
 		if (!is_numeric($numNoches)|| $numNoches<=0)  {
 			$errores .= "Noches debe ser numérico y mayor que 0";#
 		}
-		// echo "$numNoches";
 		
-		$total=calcularPrecio($numNoches);		
-		// echo "$total";
+		if (!empty($errores)) { //que hace exactamente?
+			throw new Exception($errores);			
+		}		
+		if ($vuelo=='') {
+			$errores .= "Debe seleccionar un destino";#			
+		}		
+		switch ($vuelo) {
+			case "Madrid":
+				$vuelo = 150;
+				break;
+			case "Paris":
+				$vuelo = 250;
+				break;
+			case "Los Angeles":
+				$vuelo = 450;
+				break;
+				case "Roma":
+				$vuelo = 200;
+					break;
+		}
+		if (!empty($errores)) {
+			throw new Exception($errores);			
+		}
+		if (!is_numeric($numCoche)|| $numCoche<=0)  {
+
+			$alquiler =0;
+		}
 		
+		if ($numCoche>=3) {
+			$alquiler =((float)$numCoche * 0.80) * PRECIO_COCHE;
+        }
+		if ($numCoche>=7){
+			$alquiler = ($numCoche * PRECIO_COCHE)-50;
+		}
+		
+	echo $alquiler;
+		
+			
+		$total=calcularPrecio($numNoches,$vuelo,$alquiler);				
+	
+	
 		if (!empty($errores)) {
 			throw new Exception($errores);			
 		}		
 		
 	} catch (Exception $e) {
 		$mensajes =$e ->getMessage();
-		//throw $th;
-	}
-		
+			
 	}	
-	function calcularPrecio($noches) {            
-		return PRECIO_NOCHE * $noches;  
+	  function calcularPrecio($noches,$vuelo, $coche) {            
+		return (PRECIO_NOCHE * $noches) +$coche + $vuelo;  
 	   }
-	   
 ?>
 <!DOCTYPE html>
 <html lang="es">
