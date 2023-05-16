@@ -1,10 +1,19 @@
 <?php
+// guardar los datos en el navegador
+session_start();
+$errores = '' ;	
+define("PRECIO_NOCHE",60);	
+define("PRECIO_COCHE",40);
+// if (isset($_SESSION['datos'])){
+// 	//crear variables independientes a partir de las claves asociativas del array 
+// 	extract($_SESSION['datos']);
+// 	} Este código solo es necesario cuando se usan servicios
+	// echo "$numNoches $vuelo $numCoche";
+
 // recuperamos los values de los inputs y definimos las constantes
-	if(isset($_POST['enviar'])){
-		$errores = '';	
-		define("PRECIO_NOCHE",60);	
-		define("PRECIO_COCHE",40);
-	}	
+	if(isset($_POST['enviar'])){	
+	
+	
 		// echo PRECIO_NOCHE;
 	try {
 		
@@ -15,11 +24,9 @@
 			$errores .= "Noches debe ser numérico y mayor que 0";#
 		}
 		
-		if (!empty($errores)) { //que hace exactamente?
-			throw new Exception($errores);			
-		}		
+				
 		if ($vuelo=='') {
-			$errores .= "Debe seleccionar un destino";#			
+			$errores .= "Debe seleccionar un destino" ;#			
 		}		
 		switch ($vuelo) {
 			case "Madrid":
@@ -35,9 +42,10 @@
 				$vuelo = 200;
 					break;
 		}
-		if (!empty($errores)) {
-			throw new Exception($errores);			
+		if(empty($numCoche)){//no funciona
+			$alquiler = 0;
 		}
+	
 		if (!is_numeric($numCoche)|| $numCoche<=2)  {
 			$alquiler = $numCoche;
 		}		
@@ -48,23 +56,26 @@
 			$alquiler = ($numCoche * PRECIO_COCHE)-50;
 		}
 		
-	echo $alquiler;
-		
+	// echo $alquiler;
+	if (!empty($errores)) {
+		throw new Exception($errores);	//todas las líneas posteriores no se ejecutan		
+	}				
+		$total=calcularPrecio($numNoches,$vuelo,$alquiler);					
 			
-		$total=calcularPrecio($numNoches,$vuelo,$alquiler);				
-	
-	
-		if (!empty($errores)) {
-			throw new Exception($errores);			
-		}		
-		
 	} catch (Exception $e) {
 		$mensajes =$e ->getMessage();
 			
-	}	
+	}
+}		
 	  function calcularPrecio($noches,$vuelo, $coche) {            
 		return (PRECIO_NOCHE * $noches) +$coche + $vuelo;  
 	   }
+	   //compactar datos en la variable para conservarlos y recuperarlos si hay errores en el formulario
+	// $datos = compact('numNoches','vuelo', 'numCoche');
+	// //echo '<pre>';print_r($datos);echo '</pre>';
+	// $_SESSION ['datos'] = $datos;
+	// esta parte solo sirve cuando hay servicios
+	 
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -82,13 +93,13 @@
 			<div class="row mb-3">
 			    <label for="noches" class="col-sm-3 col-form-label">Número de noches:</label>
 			    <div class="col-sm-9">
-			      <input type="number" class="form-control" name="noches" id="noches">
+			      <input type="number" class="form-control" name="noches" id="noches" value='<?php echo $numNoches ??null;?>'>
 			    </div>
 			</div>
 			<div class="row mb-3">
 			    <label for="ciudad" class="col-sm-3 col-form-label">Destino:</label>
 			    <div class="col-sm-9">
-					<select class="form-select" name='ciudad'>
+					<select class="form-select" name='ciudad' value='<?php echo $vuelo ??null;?>'>
 					  	<option selected value=''>Selecciona un destino</option>
 					  	<option>Madrid</option>
 						<option>Paris</option>
@@ -101,7 +112,7 @@
 			    <label for="coche" class="col-sm-3 col
 				-form-label">Días alquiler coche:</label>
 			    <div class="col-sm-9">
-			      <input type="number" class="form-control" name="coche" id="coche">
+			      <input type="number" class="form-control" name="coche" id="coche" value='<?php echo $numCoche ??null;?>'>
 			    </div>
 			</div>
 			<label class="col-sm-3 col-form-label"></label>
