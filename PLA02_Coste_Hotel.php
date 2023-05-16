@@ -1,32 +1,36 @@
 <?php
+// recuperamos los values de los inputs y definimos las constantes
 	if(isset($_POST['enviar'])){
-		$numNoches = $_POST['noches'];
 		$errores = '';	
 		define("PRECIO_NOCHE",60);	
 		define("PRECIO_COCHE",40);
-		function calcularPrecio() {            
-			PRECIO_NOCHE * $numNoches;  
-		   }
-		
-		
-		//echo PRECIO_COCHE;
+	
+		// echo PRECIO_NOCHE;
 	try {
 		//code...
+		$numNoches = $_POST['noches'];
 		if (!is_numeric($numNoches)|| $numNoches<=0)  {
-			$errores .= "Noches debe ser numérico y mayor que 0";# code...
+			$errores .= "Noches debe ser numérico y mayor que 0";#
 		}
-		//echo "$numNoches";
+		// echo "$numNoches";
+		
+		$total=calcularPrecio($numNoches);		
+		// echo "$total";
+		
 		if (!empty($errores)) {
 			throw new Exception($errores);			
-		}
-		
+		}		
 		
 	} catch (Exception $e) {
 		$mensajes =$e ->getMessage();
 		//throw $th;
 	}
-	
+		
 	}	
+	function calcularPrecio($noches) {            
+		return PRECIO_NOCHE * $noches;  
+	   }
+	   
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -60,7 +64,8 @@
 				</div>
 			</div>
 			<div class="row mb-3">
-			    <label for="coche" class="col-sm-3 col-form-label">Días alquiler coche:</label>
+			    <label for="coche" class="col-sm-3 col
+				-form-label">Días alquiler coche:</label>
 			    <div class="col-sm-9">
 			      <input type="number" class="form-control" name="coche" id="coche">
 			    </div>
@@ -73,7 +78,7 @@
 		  	<div class="row mb-3">
 			    <label class="col-sm-3 col-form-label">Coste total: </label>
 			    <div class="col-sm-9">
-			      <input type="text" class="form-control" name="total" id="total" disabled>
+			      <input type="text" class="form-control" name="total" id="total" disabled value="<?php echo $total ??null;?>">
 			    </div>
 			</div><br>
 			<span class='errores'><?php echo $mensajes ??null; ?></span>
