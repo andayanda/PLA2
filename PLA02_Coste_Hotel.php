@@ -4,26 +4,14 @@ session_start();
 $errores = '' ;	
 define("PRECIO_NOCHE",60);	
 define("PRECIO_COCHE",40);
-// if (isset($_SESSION['datos'])){
-// 	//crear variables independientes a partir de las claves asociativas del array 
-// 	extract($_SESSION['datos']);
-// 	} Este código solo es necesario cuando se usan servicios
-	// echo "$numNoches $vuelo $numCoche";
-
-// recuperamos los values de los inputs y definimos las constantes
-	if(isset($_POST['enviar'])){	
-	
-	
-		// echo PRECIO_NOCHE;
-	try {
-		
+	if(isset($_POST['enviar'])){		
+	try {		
 		$numNoches = $_POST['noches'];
 		$vuelo = $_POST['ciudad'];
-		$numCoche = $_POST['coche'];
+		$numCoche = (int)$_POST['coche'];
 		if (!is_numeric($numNoches)|| $numNoches<=0)  {
 			$errores .= "Noches debe ser numérico y mayor que 0";#
 		}
-		
 				
 		if ($vuelo=='') {
 			$errores .= "Debe seleccionar un destino" ;#			
@@ -42,10 +30,9 @@ define("PRECIO_COCHE",40);
 				$vuelo = 200;
 					break;
 		}
-		if(empty($numCoche)){//no funciona
+		if(empty($numCoche)){
 			$alquiler = 0;
-		}
-	
+		}	
 		if (!is_numeric($numCoche)|| $numCoche<=2)  {
 			$alquiler = $numCoche;
 		}		
@@ -54,28 +41,19 @@ define("PRECIO_COCHE",40);
         }
 		if ($numCoche>=7){
 			$alquiler = ($numCoche * PRECIO_COCHE)-50;
-		}
-		
-	// echo $alquiler;
+		}		
 	if (!empty($errores)) {
 		throw new Exception($errores);	//todas las líneas posteriores no se ejecutan		
 	}				
 		$total=calcularPrecio($numNoches,$vuelo,$alquiler);					
 			
 	} catch (Exception $e) {
-		$mensajes =$e ->getMessage();
-			
+		$mensajes =$e ->getMessage();			
 	}
 }		
-	  function calcularPrecio($noches,$vuelo, $coche) {            
+	function calcularPrecio($noches,$vuelo, $coche) {            
 		return (PRECIO_NOCHE * $noches) +$coche + $vuelo;  
 	   }
-	   //compactar datos en la variable para conservarlos y recuperarlos si hay errores en el formulario
-	// $datos = compact('numNoches','vuelo', 'numCoche');
-	// //echo '<pre>';print_r($datos);echo '</pre>';
-	// $_SESSION ['datos'] = $datos;
-	// esta parte solo sirve cuando hay servicios
-	 
 ?>
 <!DOCTYPE html>
 <html lang="es">
